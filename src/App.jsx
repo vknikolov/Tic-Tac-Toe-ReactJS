@@ -15,31 +15,31 @@ import {
 } from "./utils/helpers";
 
 function App() {
-  // Държи имената на играчите (X и O)
+  // Holds the names of the players (X and O)
   const [players, setPlayers] = useState(PLAYERS);
 
-  // История на всички изиграни ходове
+  // History of all moves made
   const [gameTurns, setGameTurns] = useState([]);
 
-  // Определя кой е активният играч на база историята
+  // Determines the active player based on the history
   const active = deriveActivePlayer(gameTurns);
 
-  // Генерира текущото състояние на дъската според изиграните ходове
+  // Generates the current state of the board according to the moves made
   let gameBoard = deriveGameBoard(gameTurns, initialGameBoard);
 
-  // Проверява дали има победител
+  // Checks if there is a winner
   const winner = deriveWinner(gameBoard, players, WINNING_COMBINATIONS);
 
-  // Проверява за равенство (ако всички полета са заети и няма победител)
+  // Checks for a draw (if all fields are occupied and there is no winner)
   const draw = gameTurns.length === 9 && !winner;
 
-  // Обработва избора на квадратче от играча
+  // Handles the player's selection of a square
   function handleSelectSquare(x, y) {
     setGameTurns((prevTurn) => {
-      // Определя текущия играч на база предишните ходове
+      // Determines the current player based on previous moves
       const currentPlayer = deriveActivePlayer(prevTurn);
 
-      // Добавя новия ход най-отпред в историята
+      // Adds the new move to the front of the history
       const updatedTurns = [
         { square: { x: x, y: y }, player: currentPlayer },
         ...prevTurn,
@@ -49,12 +49,12 @@ function App() {
     });
   }
 
-  // Рестартира играта (изчиства историята на ходовете)
+  // Restarts the game (clears the move history)
   function handleRestart() {
     setGameTurns([]);
   }
 
-  // Променя името на играч (X или O)
+  // Changes the name of a player (X or O)
   function handlePlayersCahngeName(symbol, newName) {
     setPlayers((prevPlayers) => {
       return {
@@ -67,7 +67,7 @@ function App() {
   return (
     <main>
       <div id="game-container">
-        {/* Списък с играчите и възможност за смяна на име */}
+        {/* List of players and option to change name */}
         <ol id="players" className="highlight-player">
           <Player
             name={PLAYERS.X}
@@ -82,14 +82,11 @@ function App() {
             onChangeName={handlePlayersCahngeName}
           />
         </ol>
-        {/* Показва GameOver компонент при победа или равенство */}
         {(winner || draw) && (
           <GameOver winner={winner} restart={handleRestart} />
         )}
-        {/* Рендерира дъската за игра */}
         <GameBoard onSelectSquare={handleSelectSquare} board={gameBoard} />
       </div>
-      {/* Показва историята на ходовете */}
       <Log logData={gameTurns} />
     </main>
   );

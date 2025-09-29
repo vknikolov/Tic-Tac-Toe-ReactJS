@@ -8,7 +8,6 @@ export default function Player({ name, symbol, activePlayer, onChangeName }) {
 
   function handleEdit() {
     setIsEditing((prev) => !prev);
-    console.log(isEditing);
     if (isEditing) {
       onChangeName(symbol, playerName);
     }
@@ -16,7 +15,6 @@ export default function Player({ name, symbol, activePlayer, onChangeName }) {
 
   function handleChange(event) {
     setPlayerName(event.target.value);
-    console.log(playerName, "on Change");
   }
 
   return (
